@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login, authenticate, logout
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import login, authenticate
 from django.contrib import messages
-from .models import Item
-from .forms import ItemForm, SignUpForm
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
+from .models import UserProfile
+from .forms import CustomUserCreationForm  # Only import forms that exist
 import logging
 
 #Add logging
@@ -12,20 +12,70 @@ logger=logging.getLogger(__name__)
 
 #Apply the decorator to the following views
 @login_required
+def dashboard(request):
+    """Main dashboard that redirects based on user role"""
+    try:
+        user_role = request.user.profile.role
+        
+        if user_role == 'administrator':
+            return redirect('admin_dashboard')
+        elif user_role == 'maintenance':
+            return redirect('maintenance_dashboard')
+        elif user_role == 'quality':
+            return redirect('quality_dashboard')
+        else:
+            messages.warning(request, "Your role hasn't been assigned yet. Please contact an administrator.")
+            return render(request, 'myapp/pending_role.html')
+    except UserProfile.DoesNotExist:
+        messages.error(request, "Profile not found. Please contact administrator.")
+        return redirect('home')
+    
+def role_required(allowed_roles):
+    """Decorator to check if user has required role"""
+    def decorator(view_func):
+        def wrapper(request, *args, **kwargs):
+            if not request.user.is_authenticated:
+                return redirect('login')
+            
+            try:
+                user_role = request.user.profile.role
+                if user_role in allowed_roles:
+                    return view_func(request, *args, **kwargs)
+                else:
+                    return HttpResponseForbidden("You don't have permission to access this page.")
+            except UserProfile.DoesNotExist:
+                return HttpResponseForbidden("Profile not found.")
+        return wrapper
+    return decorator  
+#Admin Dashboard
+@login_required
+@role_required(['administrator'])
+def admin_dashboard(request):
+    context = {
+        'user_role': 'Administrator',
+        'page_title': 'Administrator Dashboard',
+    }
+    return render(request, 'myapp/admin_dashboard.html', context)
 
-def item_list(request):
-    items = Item.objects.all()
-    return render(request, 'myapp/item_list.html', {'items': items})
+#Maintenance Dashboard
+@login_required
+@role_required(['maintenance'])
+def maintenance_dashboard(request):
+    context = {
+        'user_role': 'Maintenance/Calibration User',
+        'page_title': 'Maintenance Dashboard',
+    }
+    return render(request, 'myapp/maintenance_dashboard.html', context)
 
-def add_item(request):
-    if request.method == 'POST':
-        form = ItemForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('item_list')
-    else:
-        form = ItemForm()
-    return render(request, 'myapp/add_item.html', {'form': form})
+#Quality Dashboard
+@login_required
+@role_required(['quality'])
+def quality_dashboard(request):
+    context = {
+        'user_role': 'Quality Engineer',
+        'page_title': 'Quality Dashboard',
+    }
+    return render(request, 'myapp/quality_dashboard.html', context) 
 
 #Home page view
 def home(request):
@@ -36,14 +86,10 @@ def test(request):
     return render(request, 'myapp/test.html')
 
 #Signup View
-from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate
-from django.contrib import messages
-from .forms import SignUpForm
 
 def signup(request):
     if request.method == 'POST':
-        form = SignUpForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         
         print("Form is valid:", form.is_valid())
         
@@ -51,20 +97,13 @@ def signup(request):
             print("Cleaned data:", form.cleaned_data)
             
             try:
-                # Save the user but don't commit yet
-                user = form.save(commit=False)
+                # Let the form handle saving (it will create profile automatically)
+                user = form.save()
                 
-                # Manually set the additional fields
-                user.email = form.cleaned_data['email']
-                user.first_name = form.cleaned_data['first_name']
-                user.last_name = form.cleaned_data['last_name']
-                
-                # Now save to database
-                user.save()
-                
-                print(f"Manually saved - Email: '{user.email}'")
-                print(f"Manually saved - First name: '{user.first_name}'")
-                print(f"Manually saved - Last name: '{user.last_name}'")
+                print(f"User created - Email: '{user.email}'")
+                print(f"User created - First name: '{user.first_name}'")
+                print(f"User created - Last name: '{user.last_name}'")
+                print(f"Profile role: '{user.profile.role}'")  # Will show default role
                 
                 # Get the username and password for authentication
                 username = form.cleaned_data.get('username')
@@ -74,8 +113,8 @@ def signup(request):
                 authenticated_user = authenticate(username=username, password=raw_password)
                 if authenticated_user is not None:
                     login(request, authenticated_user)
-                    messages.success(request, f'Account created successfully for {username}!')
-                    return redirect('home')
+                    messages.success(request, f'Account created successfully for {username}! Your role will be assigned by an administrator.')
+                    return redirect('dashboard')  # Changed from 'home' to 'dashboard'
                 else:
                     messages.error(request, 'Account created but there was an error logging you in.')
                     
@@ -87,7 +126,7 @@ def signup(request):
             print("Form errors:", form.errors)
             messages.error(request, 'Please correct the errors below.')
     else:
-        form = SignUpForm()
+        form = CustomUserCreationForm()  # Changed from SignUpForm to CustomUserCreationForm
     
     return render(request, 'myapp/signup.html', {'form': form})
 

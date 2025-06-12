@@ -1,0 +1,26 @@
+html{% extends 'myapp/base_dashboard.html' %}
+
+{% block content %}
+<div class="dashboard-card" style="text-align: center;">
+    <h1>Role Assignment Pending</h1>
+    <div style="margin: 2rem 0;">
+        <div style="font-size: 4rem; color: #ffd700;">⏳</div>
+    </div>
+    <p style="font-size: 1.2rem; color: #666; margin-bottom: 2rem;">
+        Your account has been created successfully, but your role hasn't been assigned yet.
+    </p>
+    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin: 2rem 0;">
+        <h3 style="color: #1e3c72;">What happens next?</h3>
+        <ul style="text-align: left; max-width: 400px; margin: 0 auto;">
+            <li>An administrator will review your account</li>
+            <li>Your role will be assigned based on your responsibilities</li>
+            <li>You'll receive access to the appropriate dashboard</li>
+            <li>You may need to contact your supervisor</li>
+        </ul>
+    </div>
+    <p style="color: #666;">
+        <strong>Need help?</strong> Contact your system administrator or supervisor to assign your role.
+    </p>
+    <a href="{% url 'logout' %}" class="btn" style="margin-top: 1rem;">Logout</a>
+</div>
+{% endblock %}
