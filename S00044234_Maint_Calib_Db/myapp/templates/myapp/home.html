@@ -348,10 +348,11 @@
     <header class="header">
         <nav class="nav-container">
             <div class="logo-section">
+                {% load static %}
                 <div class="logo">
-                    <img src="{% static 'my_app/images/LaserValidationLogo.jpeg' %}" 
+                    <img src="{% static 'myapp/images/LaserValidationLogo.jpeg' %}" 
                          alt="Laser Validation Logo" 
-                         onerror="this.style.display='none'; this.parentNode.innerHTML='LV';">
+                         onerror="this.style.display='none'; this.parentNode.innerHTML='M&C';">
                 </div>
                 <div class="logo-text">Maintenance & Calibration</div>
             </div>

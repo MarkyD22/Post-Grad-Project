@@ -1,4 +1,7 @@
+{% load static %}
 <!DOCTYPE html>
+<img src="{% static 'myapp/images/LaserValidationLogo.jpeg' %}" alt="Logo">
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -24,19 +27,36 @@
             max-width: 400px;
         }
         
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #1e3c72;
+            font-size: 0.95rem;
+        }
+        
         .form-control {
             width: 100%;
             padding: 0.8rem;
-            margin-bottom: 1rem;
             border: 2px solid #ddd;
             border-radius: 8px;
             font-size: 1rem;
             box-sizing: border-box;
+            transition: border-color 0.3s ease;
         }
         
         .form-control:focus {
             border-color: #1e3c72;
             outline: none;
+            box-shadow: 0 0 0 3px rgba(30, 60, 114, 0.1);
+        }
+        
+        .form-control.error {
+            border-color: #dc3545;
         }
         
         .btn {
@@ -49,6 +69,7 @@
             cursor: pointer;
             width: 100%;
             margin-top: 1rem;
+            transition: background-color 0.3s ease;
         }
         
         .btn:hover {
@@ -59,12 +80,21 @@
             color: #1e3c72;
             text-align: center;
             margin-bottom: 2rem;
+            font-size: 1.8rem;
         }
         
         .help-text {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #666;
-            margin-top: 0.5rem;
+            margin-top: 0.3rem;
+            line-height: 1.4;
+        }
+        
+        .field-help {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 0.3rem;
+            font-style: italic;
         }
         
         .messages {
@@ -83,6 +113,12 @@
             color: #155724;
         }
         
+        .alert-error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        
         .text-center {
             text-align: center;
         }
@@ -90,10 +126,50 @@
         .link {
             color: #1e3c72;
             text-decoration: none;
+            font-weight: 600;
         }
         
         .link:hover {
             text-decoration: underline;
+        }
+        
+        .form-errors {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 0.5rem;
+            border-radius: 5px;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+        }
+        
+        .required {
+            color: #dc3545;
+        }
+        
+        .password-requirements {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid #ffd700;
+        }
+        
+        .password-requirements h4 {
+            color: #1e3c72;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .password-requirements ul {
+            margin: 0;
+            padding-left: 1.2rem;
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .password-requirements li {
+            margin-bottom: 0.2rem;
         }
     </style>
 </head>
@@ -112,13 +188,103 @@
         <form method="post">
             {% csrf_token %}
             
-            {{ form.username }}
-            {{ form.first_name }}
-            {{ form.last_name }}
-            {{ form.email }}
-            {{ form.employee_id }}
-            {{ form.password1 }}
-            {{ form.password2 }}
+            <!-- Username Field -->
+            <div class="form-group">
+                <label for="id_username" class="form-label">Username <span class="required">*</span></label>
+                <input type="text" name="username" class="form-control" placeholder="Choose a username" 
+                       id="id_username" required maxlength="150" 
+                       value="{{ form.username.value|default:'' }}">
+                {% if form.username.errors %}
+                    <div class="form-errors">{{ form.username.errors.0 }}</div>
+                {% endif %}
+                <div class="field-help">Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</div>
+            </div>
+            
+            <!-- First Name Field -->
+            <div class="form-group">
+                <label for="id_first_name" class="form-label">First Name <span class="required">*</span></label>
+                <input type="text" name="first_name" class="form-control" placeholder="Enter your first name" 
+                       id="id_first_name" required maxlength="30" 
+                       value="{{ form.first_name.value|default:'' }}">
+                {% if form.first_name.errors %}
+                    <div class="form-errors">{{ form.first_name.errors.0 }}</div>
+                {% endif %}
+            </div>
+            
+            <!-- Last Name Field -->
+            <div class="form-group">
+                <label for="id_last_name" class="form-label">Last Name <span class="required">*</span></label>
+                <input type="text" name="last_name" class="form-control" placeholder="Enter your last name" 
+                       id="id_last_name" required maxlength="30" 
+                       value="{{ form.last_name.value|default:'' }}">
+                {% if form.last_name.errors %}
+                    <div class="form-errors">{{ form.last_name.errors.0 }}</div>
+                {% endif %}
+            </div>
+            
+            <!-- Email Field -->
+            <div class="form-group">
+                <label for="id_email" class="form-label">Email Address <span class="required">*</span></label>
+                <input type="email" name="email" class="form-control" placeholder="Enter your email address" 
+                       id="id_email" required 
+                       value="{{ form.email.value|default:'' }}">
+                {% if form.email.errors %}
+                    <div class="form-errors">{{ form.email.errors.0 }}</div>
+                {% endif %}
+            </div>
+            
+            <!-- Employee ID Field -->
+            <div class="form-group">
+                <label for="id_employee_id" class="form-label">Employee ID</label>
+                <input type="text" name="employee_id" class="form-control" placeholder="Enter your employee ID (optional)" 
+                       id="id_employee_id" maxlength="20" 
+                       value="{{ form.employee_id.value|default:'' }}">
+                {% if form.employee_id.errors %}
+                    <div class="form-errors">{{ form.employee_id.errors.0 }}</div>
+                {% endif %}
+                <div class="field-help">Optional. This can be assigned later by an administrator.</div>
+            </div>
+            
+            <!-- Password Requirements -->
+            <div class="password-requirements">
+                <h4>Password Requirements:</h4>
+                <ul>
+                    <li>At least 8 characters long</li>
+                    <li>Cannot be too similar to your personal information</li>
+                    <li>Cannot be a commonly used password</li>
+                    <li>Cannot be entirely numeric</li>
+                </ul>
+            </div>
+            
+            <!-- Password Field -->
+            <div class="form-group">
+                <label for="id_password1" class="form-label">Password <span class="required">*</span></label>
+                <input type="password" name="password1" class="form-control" placeholder="Create a strong password" 
+                       id="id_password1" required>
+                {% if form.password1.errors %}
+                    <div class="form-errors">{{ form.password1.errors.0 }}</div>
+                {% endif %}
+            </div>
+            
+            <!-- Confirm Password Field -->
+            <div class="form-group">
+                <label for="id_password2" class="form-label">Confirm Password <span class="required">*</span></label>
+                <input type="password" name="password2" class="form-control" placeholder="Confirm your password" 
+                       id="id_password2" required>
+                {% if form.password2.errors %}
+                    <div class="form-errors">{{ form.password2.errors.0 }}</div>
+                {% endif %}
+                <div class="field-help">Enter the same password as before, for verification.</div>
+            </div>
+            
+            <!-- General Form Errors -->
+            {% if form.non_field_errors %}
+                <div class="form-errors">
+                    {% for error in form.non_field_errors %}
+                        <div>{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
             
             <div class="help-text">
                 <p><strong>Note:</strong> Your role will be assigned by an administrator after account creation.</p>

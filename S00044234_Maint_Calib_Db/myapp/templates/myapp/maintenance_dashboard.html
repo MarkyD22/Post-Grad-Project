@@ -1,0 +1,184 @@
+{% extends 'myapp/base_dashboard.html' %}
+
+{% load static %}
+<img src="{% static 'myapp/images/LaserValidationLogo.jpeg' %}" alt="Logo">
+
+{% block content %}
+<style>
+    /* Custom logo size for maintenance dashboard */
+    .logo {
+        width: 45px;
+        height: 45px;
+        font-size: 0.9rem;
+    }
+</style>
+
+<!-- Maintenance Quick Actions -->
+<div class="quick-actions">
+    <h3>🔧 Quick Actions</h3>
+    <div class="actions-grid">
+        <a href="#" class="btn btn-primary">View Due Tasks</a>
+        <a href="#" class="btn btn-secondary">Print Procedures</a>
+        <a href="#" class="btn btn-outline">Upload Completed Work</a>
+        <a href="#" class="btn btn-outline">Report Equipment Issue</a>
+    </div>
+</div>
+
+<!-- Priority Alerts -->
+<div class="dashboard-card" style="border-left: 5px solid #dc3545; margin-bottom: 2rem;">
+    <div class="card-header">
+        <div class="card-icon" style="background: #dc3545;">⚠️</div>
+        <h3 class="card-title" style="color: #dc3545;">Priority Alerts</h3>
+    </div>
+    <div class="card-content">
+        <div style="background: #f8d7da; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+            <strong>Overdue Calibration:</strong> CNC Machine #003 - Due 3 days ago
+        </div>
+        <div style="background: #fff3cd; padding: 1rem; border-radius: 8px;">
+            <strong>Maintenance Due Today:</strong> Press Machine #007 - Scheduled maintenance
+        </div>
+    </div>
+</div>
+
+<!-- Dashboard Grid -->
+<div class="dashboard-grid">
+    <!-- Equipment Due This Week Card -->
+    <div class="dashboard-card">
+        <div class="card-header">
+            <div class="card-icon">📅</div>
+            <h3 class="card-title">Due This Week</h3>
+        </div>
+        <div class="card-content">
+            <p>Equipment requiring maintenance or calibration within the next 7 days.</p>
+            
+            <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                <h4 style="color: #1e3c72; margin-bottom: 0.5rem;">Maintenance Due (3 items)</h4>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="padding: 0.3rem 0; border-bottom: 1px solid #ddd;">
+                        <strong>CNC Machine #001</strong> - Due June 15th
+                    </li>
+                    <li style="padding: 0.3rem 0; border-bottom: 1px solid #ddd;">
+                        <strong>Press #004</strong> - Due June 16th
+                    </li>
+                    <li style="padding: 0.3rem 0;">
+                        <strong>Conveyor System #002</strong> - Due June 18th
+                    </li>
+                </ul>
+            </div>
+
+            <div style="background: #e8f4fd; padding: 1rem; border-radius: 8px;">
+                <h4 style="color: #004085; margin-bottom: 0.5rem;">Calibration Due (2 items)</h4>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="padding: 0.3rem 0; border-bottom: 1px solid #ddd;">
+                        <strong>Scale #005</strong> - Due June 17th
+                    </li>
+                    <li style="padding: 0.3rem 0;">
+                        <strong>Torque Wrench #008</strong> - Due June 19th
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="card-actions">
+            <a href="#" class="btn btn-primary">View Full Schedule</a>
+            <a href="#" class="btn btn-secondary">Print List</a>
+        </div>
+    </div>
+
+    <!-- Maintenance Procedures Card -->
+    <div class="dashboard-card">
+        <div class="card-header">
+            <div class="card-icon">📋</div>
+            <h3 class="card-title">Maintenance Procedures</h3>
+        </div>
+        <div class="card-content">
+            <p>Access and print maintenance procedures for equipment.</p>
+            <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                <li>Download procedure checklists</li>
+                <li>Print maintenance instructions</li>
+                <li>Access safety protocols</li>
+                <li>View equipment specifications</li>
+            </ul>
+        </div>
+        <div class="card-actions">
+            <a href="#" class="btn btn-primary">Browse Procedures</a>
+            <a href="#" class="btn btn-secondary">Search by Equipment</a>
+        </div>
+    </div>
+
+    <!-- Calibration Tasks Card -->
+    <div class="dashboard-card">
+        <div class="card-header">
+            <div class="card-icon">⚖️</div>
+            <h3 class="card-title">Calibration Tasks</h3>
+        </div>
+        <div class="card-content">
+            <p>Review and complete calibration procedures for measurement equipment.</p>
+            <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                <li>Calibration procedure downloads</li>
+                <li>Standards and tolerances</li>
+                <li>Calibration certificates</li>
+                <li>Equipment adjustment guides</li>
+            </ul>
+        </div>
+        <div class="card-actions">
+            <a href="#" class="btn btn-primary">View Calibrations</a>
+            <a href="#" class="btn btn-secondary">Print Certificates</a>
+        </div>
+    </div>
+
+    <!-- Document Upload Card -->
+    <div class="dashboard-card">
+        <div class="card-header">
+            <div class="card-icon">📤</div>
+            <h3 class="card-title">Upload Completed Work</h3>
+        </div>
+        <div class="card-content">
+            <p>Upload completed maintenance and calibration documentation.</p>
+            <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                <li>Upload completed checklists</li>
+                <li>Submit calibration results</li>
+                <li>Attach photos and notes</li>
+                <li>Record any issues found</li>
+            </ul>
+        </div>
+        <div class="card-actions">
+            <a href="#" class="btn btn-primary">Upload Documents</a>
+            <a href="#" class="btn btn-secondary">View Upload History</a>
+        </div>
+    </div>
+
+    <!-- Equipment Search Card -->
+    <div class="dashboard-card">
+        <div class="card-header">
+            <div class="card-icon">🔍</div>
+            <h3 class="card-title">Equipment Search</h3>
+        </div>
+        <div class="card-content">
+            <p>Search for specific equipment and view maintenance history.</p>
+            <div style="margin: 1rem 0;">
+                <input type="text" placeholder="Search by machine ID or name..." 
+                       style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 5px;">
+            </div>
+            <p style="font-size: 0.9rem; color: #666;">
+                Search by machine ID, name, location, or maintenance interval.
+            </p>
+        </div>
+        <div class="card-actions">
+            <a href="#" class="btn btn-primary">Advanced Search</a>
+            <a href="#" class="btn btn-secondary">Equipment List</a>
+        </div>
+    </div>
+
+    <!-- Issue Reporting Card -->
+    <div class="dashboard-card">
+        <div class="card-header">
+            <div class="card-icon">⚠️</div>
+            <h3 class="card-title">Report Equipment Issues</h3>
+        </div>
+        <div class="card-content">
+            <p>Report equipment failures, safety concerns, or maintenance needs.</p>
+            <ul style
+    </div>   
+</div>
+{% endblock %}
+

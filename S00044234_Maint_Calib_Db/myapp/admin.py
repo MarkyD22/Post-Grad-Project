@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from django.utils.html import format_html
-from .models import UserProfile
+from .models import UserProfile, Equipment
 
 # Register your models here.
 
@@ -79,3 +79,123 @@ admin.site.register(User, CustomUserAdmin)
 admin.site.site_header = "Maintenance & Calibration System Administration"
 admin.site.site_title = "M&C Admin"
 admin.site.index_title = "System Administration"
+
+#Equipment Database Class
+@admin.register(Equipment)
+class EquipmentAdmin(admin.ModelAdmin):
+    list_display = (
+        'Machine_ID', 
+        'Machine_Name', 
+        'Machine_Type', 
+        'Machine_Location', 
+        'status',
+        'get_maintenance_status',
+        'get_calibration_status',
+        'Last_Maintenance_Date',
+        'Last_Calibration_Date'
+    )
+    list_filter = (
+        'Machine_Type', 
+        'status', 
+        'Machine_Location',
+        'Last_Maintenance_Date',
+        'Last_Calibration_Date'
+    )
+    search_fields = (
+        'Machine_ID', 
+        'Machine_Name', 
+        'Machine_Location',
+        'manufacturer',
+        'model_number'
+    )
+    list_editable = (
+        'Last_Maintenance_Date', 
+        'Last_Calibration_Date',
+        'status'
+    )
+    readonly_fields = (
+        'created_at', 
+        'updated_at', 
+        'created_by', 
+        'last_updated_by',
+        'next_maintenance_due',
+        'next_calibration_due'
+    )
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('Machine_ID', 'Machine_Name', 'Machine_Type', 'Machine_Location', 'status')
+        }),
+        ('Equipment Details', {
+            'fields': ('manufacturer', 'model_number', 'installation_date'),
+            'classes': ('collapse',)
+        }),
+        ('Maintenance & Calibration', {
+            'fields': (
+                'Last_Maintenance_Date', 
+                'Last_Calibration_Date',
+                'maintenance_interval',
+                'calibration_interval',
+                'next_maintenance_due',
+                'next_calibration_due'
+            )
+        }),
+        ('System Information', {
+            'fields': ('created_at', 'updated_at', 'created_by', 'last_updated_by'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    def get_maintenance_status(self, obj):
+        status = obj.maintenance_status
+        colors = {
+            'overdue': '#dc3545',
+            'due_soon': '#ffc107', 
+            'ok': '#28a745',
+            'no_data': '#6c757d'
+        }
+        labels = {
+            'overdue': 'Overdue',
+            'due_soon': 'Due Soon',
+            'ok': 'OK',
+            'no_data': 'No Data'
+        }
+        
+        from django.utils.html import format_html
+        return format_html(
+            '<span style="background-color: {}; color: white; padding: 3px 8px; '
+            'border-radius: 12px; font-size: 11px; font-weight: bold;">{}</span>',
+            colors.get(status, '#6c757d'),
+            labels.get(status, 'Unknown')
+        )
+    get_maintenance_status.short_description = 'Maintenance Status'
+    
+    def get_calibration_status(self, obj):
+        status = obj.calibration_status
+        colors = {
+            'overdue': '#dc3545',
+            'due_soon': '#ffc107',
+            'ok': '#28a745', 
+            'no_data': '#6c757d'
+        }
+        labels = {
+            'overdue': 'Overdue',
+            'due_soon': 'Due Soon',
+            'ok': 'OK',
+            'no_data': 'No Data'
+        }
+        
+        from django.utils.html import format_html
+        return format_html(
+            '<span style="background-color: {}; color: white; padding: 3px 8px; '
+            'border-radius: 12px; font-size: 11px; font-weight: bold;">{}</span>',
+            colors.get(status, '#6c757d'),
+            labels.get(status, 'Unknown')
+        )
+    get_calibration_status.short_description = 'Calibration Status'
+    
+    def save_model(self, request, obj, form, change):
+        if not change:  # Creating new object
+            obj.created_by = request.user
+        obj.last_updated_by = request.user
+        super().save_model(request, obj, form, change)

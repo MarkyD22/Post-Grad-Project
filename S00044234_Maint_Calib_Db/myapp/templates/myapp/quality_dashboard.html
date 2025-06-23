@@ -15,29 +15,71 @@
     </div>
 </div>
 
-<!-- Compliance Status -->
-<div class="dashboard-card" style="border-left: 5px solid #28a745; margin-bottom: 2rem;">
+<!-- Operational Compliance Status -->
+<div class="dashboard-card" style="border-left: 5px solid #dc3545; margin-bottom: 2rem;">
     <div class="card-header">
-        <div class="card-icon" style="background: #28a745;">✅</div>
-        <h3 class="card-title" style="color: #28a745;">Compliance Status</h3>
+        <div class="card-icon" style="background: #dc3545;">📊</div>
+        <h3 class="card-title" style="color: #dc3545;">Operational Compliance Status</h3>
     </div>
     <div class="card-content">
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-            <div style="background: #d4edda; padding: 1rem; border-radius: 8px; text-align: center;">
-                <h4 style="color: #155724;">ISO 13485</h4>
-                <p style="font-size: 1.5rem; font-weight: bold; color: #155724; margin: 0.5rem 0;">98.5%</p>
-                <small style="color: #155724;">Compliance Rate</small>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+            
+            <!-- Overdue Tasks -->
+            <div style="background: #f8d7da; padding: 1rem; border-radius: 8px; border: 1px solid #f5c6cb;">
+                <h4 style="color: #721c24; margin-bottom: 0.5rem;">⚠️ Overdue Tasks</h4>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <div style="text-align: center;">
+                        <p style="font-size: 1.8rem; font-weight: bold; color: #721c24; margin: 0;">{{ overdue_calibrations|default:"3" }}</p>
+                        <small style="color: #721c24;">Calibrations</small>
+                    </div>
+                    <div style="text-align: center;">
+                        <p style="font-size: 1.8rem; font-weight: bold; color: #721c24; margin: 0;">{{ overdue_maintenance|default:"2" }}</p>
+                        <small style="color: #721c24;">Maintenance</small>
+                    </div>
+                </div>
+                <div style="background: rgba(255,255,255,0.7); padding: 0.5rem; border-radius: 5px; font-size: 0.85rem;">
+                    <strong>Most Overdue:</strong><br>
+                    • CNC Machine #003 (7 days overdue)<br>
+                    • Press #007 (3 days overdue)
+                </div>
             </div>
-            <div style="background: #d4edda; padding: 1rem; border-radius: 8px; text-align: center;">
-                <h4 style="color: #155724;">21CFR Part 820</h4>
-                <p style="font-size: 1.5rem; font-weight: bold; color: #155724; margin: 0.5rem 0;">97.2%</p>
-                <small style="color: #155724;">Compliance Rate</small>
+
+            <!-- Unplanned Calibrations -->
+            <div style="background: #fff3cd; padding: 1rem; border-radius: 8px; border: 1px solid #ffeaa7;">
+                <h4 style="color: #856404; margin-bottom: 0.5rem;">🔧 Unplanned Calibrations</h4>
+                <div style="text-align: center; margin-bottom: 1rem;">
+                    <p style="font-size: 2.2rem; font-weight: bold; color: #856404; margin: 0;">{{ unplanned_calibrations|default:"5" }}</p>
+                    <small style="color: #856404;">This Month</small>
+                </div>
+                <div style="background: rgba(255,255,255,0.7); padding: 0.5rem; border-radius: 5px; font-size: 0.85rem;">
+                    <strong>Recent Machines:</strong><br>
+                    • Scale #009 - Drift detected<br>
+                    • Torque Wrench #012 - Out of spec<br>
+                    • Gauge #015 - Customer complaint
+                </div>
             </div>
-            <div style="background: #fff3cd; padding: 1rem; border-radius: 8px; text-align: center;">
-                <h4 style="color: #856404;">EU MDR</h4>
-                <p style="font-size: 1.5rem; font-weight: bold; color: #856404; margin: 0.5rem 0;">95.8%</p>
-                <small style="color: #856404;">Needs Attention</small>
+
+            <!-- Unplanned Maintenance -->
+            <div style="background: #cce7ff; padding: 1rem; border-radius: 8px; border: 1px solid #b3d9ff;">
+                <h4 style="color: #004085; margin-bottom: 0.5rem;">🔨 Unplanned Maintenance</h4>
+                <div style="text-align: center; margin-bottom: 1rem;">
+                    <p style="font-size: 2.2rem; font-weight: bold; color: #004085; margin: 0;">{{ unplanned_maintenance|default:"8" }}</p>
+                    <small style="color: #004085;">This Month</small>
+                </div>
+                <div style="background: rgba(255,255,255,0.7); padding: 0.5rem; border-radius: 5px; font-size: 0.85rem;">
+                    <strong>Recent Machines:</strong><br>
+                    • CNC Machine #001 - Bearing failure<br>
+                    • Conveyor #004 - Belt replacement<br>
+                    • Press #008 - Hydraulic leak
+                </div>
             </div>
+        </div>
+
+        <!-- Quick Action Buttons for this section -->
+        <div style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <a href="#" class="btn btn-primary" style="font-size: 0.9rem; padding: 0.5rem 1rem;">View Overdue Details</a>
+            <a href="#" class="btn btn-secondary" style="font-size: 0.9rem; padding: 0.5rem 1rem;">Unplanned Reports</a>
+            <a href="#" class="btn btn-outline" style="font-size: 0.9rem; padding: 0.5rem 1rem;">Export Data</a>
         </div>
     </div>
 </div>
