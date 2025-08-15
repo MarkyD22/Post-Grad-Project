@@ -1,0 +1,1 @@
+echo "no dependencies" > requirements.txt

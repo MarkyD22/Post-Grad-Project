@@ -1,0 +1,557 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome - Maintenance & Calibration System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #1e3c72 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: #ffd700;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #1e3c72;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            color: #1e3c72;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #1e3c72;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: inline-block;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: #1e3c72;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2a5298;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(30, 60, 114, 0.3);
+        }
+
+        .btn-secondary {
+            background: #ffd700;
+            color: #1e3c72;
+        }
+
+        .btn-secondary:hover {
+            background: #ffed4e;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #1e3c72;
+            border: 2px solid #1e3c72;
+        }
+
+        .btn-outline:hover {
+            background: #1e3c72;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .welcome-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            border-left: 6px solid #ffd700;
+        }
+
+        .welcome-title {
+            font-size: 2.5rem;
+            color: #1e3c72;
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+
+        .welcome-message {
+            font-size: 1.3rem;
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .user-greeting {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #1e3c72;
+            padding: 1.5rem 2rem;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .system-description {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        .description-title {
+            font-size: 2rem;
+            color: #1e3c72;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .description-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 2rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .feature-item {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid #ffd700;
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1e3c72;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-desc {
+            font-size: 0.95rem;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .action-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .action-title {
+            font-size: 1.8rem;
+            color: #1e3c72;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .action-description {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .role-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .role-card {
+            background: linear-gradient(135deg, #e8f4fd, #f0f8ff);
+            border: 2px solid #007bff;
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .role-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 123, 255, 0.2);
+        }
+
+        .role-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .role-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1e3c72;
+            margin-bottom: 0.5rem;
+        }
+
+        .role-desc {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .contact-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .contact-btn {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-notify {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+        }
+
+        .btn-notify:hover {
+            background: linear-gradient(135deg, #218838, #1c7a6b);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .user-info {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .welcome-title {
+                font-size: 2rem;
+            }
+
+            .main-content {
+                padding: 2rem 1rem;
+            }
+
+            .welcome-card,
+            .system-description,
+            .action-section {
+                padding: 2rem 1.5rem;
+            }
+
+            .contact-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Messages */
+        .messages {
+            margin-bottom: 2rem;
+        }
+
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .alert-info {
+            background: #cce7ff;
+            border: 1px solid #b3d9ff;
+            color: #004085;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-container">
+            <div class="logo">
+            <img src="{% static 'myapp/images/LaserValidationLogo.jpeg' %}" 
+                alt="Laser Validation Logo" 
+                onerror="this.style.display='none'; this.parentNode.innerHTML='M&C';">
+            </div>
+            
+            <div class="user-info">
+                <span class="user-name">
+                    {{ user.first_name|default:user.username }}
+                </span>
+                
+                <div class="nav-menu">
+                    <a href="{% url 'home' %}" class="btn btn-outline">Home</a>
+                    {% if user.is_staff %}
+                        <a href="/admin/" class="btn btn-secondary">Admin</a>
+                    {% endif %}
+                    <form method="post" action="{% url 'logout' %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Logout</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <!-- Messages -->
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Welcome Section -->
+        <div class="welcome-card">
+            <h1 class="welcome-title">Welcome to the System</h1>
+            <div class="user-greeting">
+                Welcome {{ user.first_name|default:user.username }}! Please contact admin to assign your role.
+            </div>
+            <p class="welcome-message">
+                You have successfully logged into the Maintenance and Calibration Tracking System. 
+                To access the full functionality, you need to have a role assigned by an administrator.
+            </p>
+        </div>
+
+        <!-- System Description -->
+        <div class="system-description">
+            <h2 class="description-title">About This System</h2>
+            <div class="description-content">
+                <p>
+                    The Maintenance and Calibration Tracking System is a comprehensive solution designed 
+                    specifically for Small Medium Enterprises manufacturing medical devices and their sub-assemblies. 
+                    This system ensures compliance with industry quality standards including ISO13485, 21CFR Part 820, 
+                    and EU MDR requirements.
+                </p>
+                
+                <p style="margin-top: 1rem;">
+                    Our system automates the process of managing and tracking Preventative Maintenance (PM) and 
+                    Calibration Tasks, providing real-time visibility into equipment status, generating compliance 
+                    reports, and maintaining complete audit trails for regulatory purposes.
+                </p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">⚙️</div>
+                    <div class="feature-title">Equipment Management</div>
+                    <div class="feature-desc">Track all manufacturing equipment with detailed maintenance histories and real-time status monitoring.</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📊</div>
+                    <div class="feature-title">Automated Reporting</div>
+                    <div class="feature-desc">Generate comprehensive reports for compliance audits and performance analysis.</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-title">Proactive Alerts</div>
+                    <div class="feature-desc">Receive notifications for upcoming maintenance and calibration tasks to prevent overdue items.</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">✅</div>
+                    <div class="feature-title">Compliance Ready</div>
+                    <div class="feature-desc">Built-in compliance features for medical device manufacturing standards and regulations.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Role Assignment Section -->
+        <div class="action-section">
+            <h2 class="action-title">Request Role Assignment</h2>
+            <p class="action-description">
+                To begin using the system, you need to have one of the following roles assigned by an administrator. 
+                Each role provides access to specific features and responsibilities within the system.
+            </p>
+
+            <div class="role-options">
+                <div class="role-card">
+                    <div class="role-icon">🎯</div>
+                    <div class="role-title">Quality Engineer</div>
+                    <div class="role-desc">Monitor compliance, generate reports, and ensure equipment meets quality standards.</div>
+                </div>
+                <div class="role-card">
+                    <div class="role-icon">🔧</div>
+                    <div class="role-title">Maintenance User</div>
+                    <div class="role-desc">Perform maintenance tasks, complete calibrations, and update equipment records.</div>
+                </div>
+            </div>
+
+            <div class="contact-actions">
+                <a href="mailto:admin@company.com?subject=Role Assignment Request - {{ user.username }}&body=Hello,%0D%0A%0D%0AI am requesting role assignment for my account in the Maintenance and Calibration Tracking System.%0D%0A%0D%0AUser: {{ user.username }}%0D%0AName: {{ user.first_name }} {{ user.last_name }}%0D%0AEmail: {{ user.email }}%0D%0A%0D%0APlease assign the appropriate role based on my job responsibilities.%0D%0A%0D%0AThank you." 
+                   class="contact-btn btn-notify">
+                    📧 Email Administrator
+                </a>
+                <a href="#" class="btn btn-outline contact-btn" onclick="copyContactInfo()">
+                    📋 Copy Contact Info
+                </a>
+            </div>
+
+            <div style="margin-top: 2rem; padding: 1rem; background: #f8f9fa; border-radius: 10px;">
+                <p style="color: #666; font-size: 0.9rem; margin: 0;">
+                    <strong>Need immediate help?</strong> Contact IT Support at ext. 1234 or your supervisor for role assignment assistance.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function copyContactInfo() {
+            const contactText = `
+Role Assignment Request
+
+User: {{ user.username }}
+Name: {{ user.first_name }} {{ user.last_name }}
+Email: {{ user.email }}
+
+Please assign the appropriate role for the Maintenance and Calibration Tracking System.
+            `.trim();
+            
+            navigator.clipboard.writeText(contactText).then(function() {
+                alert('Contact information copied to clipboard!');
+            }).catch(function(err) {
+                console.error('Could not copy text: ', err);
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = contactText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('Contact information copied to clipboard!');
+            });
+        }
+    </script>
+</body>
+</html>

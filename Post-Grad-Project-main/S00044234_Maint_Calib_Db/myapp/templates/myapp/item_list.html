@@ -1,0 +1,19 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Items</title>
+</head>
+<body>
+    <!--Add logo-->
+    <h1>Item List</h1>
+    <ul>
+        {% for item in items %}
+        <li>{{ item.name }} - {{ item.description }}</li>
+        {% empty %}
+        <li>No items yet.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

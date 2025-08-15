@@ -1,0 +1,11 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head><title>Test</title></head>
+<body>
+    <h1>Static URL Test</h1>
+    <p>Static URL: {{ STATIC_URL }}</p>
+    <p>Logo URL: {% static 'my_app/images/LaserValidationLogo.jpeg' %}</p>
+    <img src="{% static 'my_app/images/LaserValidationLogo.jpeg' %}" alt="Logo" style="width: 100px;">
+</body>
+</html>

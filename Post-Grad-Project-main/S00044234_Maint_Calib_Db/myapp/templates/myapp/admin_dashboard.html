@@ -1,0 +1,168 @@
+{% extends 'myapp/base_dashboard.html' %}
+
+{% load static %}
+
+{% block content %}
+<!-- Administrator Quick Actions -->
+<div class="quick-actions">
+    <h3>🔧 Administrator Tools</h3>
+    <div class="actions-grid">
+        <a href="/admin/" class="btn btn-primary">System Administration</a>
+        <a href="#" class="btn btn-secondary">User Management</a>
+        <a href="#" class="btn btn-outline">Equipment Setup</a>
+        <a href="#" class="btn btn-outline">Backup & Restore</a>
+    </div>
+</div>
+
+<!-- Dashboard Grid -->
+<div class="dashboard-grid">
+    <!-- User Management Card -->
+    <div class="dashboard-card">
+        <div class="card-header">
+            <div class="card-icon">👥</div>
+            <h3 class="card-title">User Management</h3>
+        </div>
+        <div class="card-content">
+            <p>Manage user accounts, assign roles, and control system access permissions.</p>
+            <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                <li>Create and manage user accounts</li>
+                <li>Assign role-based permissions</li>
+                <li>Monitor user activity</li>
+                <li>Deactivate inactive accounts</li>
+            </ul>
+        </div>
+        <div class="card-actions">
+            <a href="/admin/auth/user/" class="btn btn-primary">Manage Users</a>
+            <a href="/admin/myapp/userprofile/" class="btn btn-secondary">User Roles</a>
+        </div>
+    </div>
+
+    <!-- Equipment Management Card -->
+    <div class="dashboard-card">
+        <div class="card-header">
+            <div class="card-icon">⚙️</div>
+            <h3 class="card-title">Equipment Database</h3>
+        </div>
+        <div class="card-content">
+            <p>Add, configure, and manage manufacturing equipment in the system.</p>
+            <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                <li>Add new equipment to database</li>
+                <li>Configure maintenance schedules</li>
+                <li>Set calibration intervals</li>
+                <li>Decommission old equipment</li>
+            </ul>
+        </div>
+        <div class="card-actions">
+            <a href="#" class="btn btn-primary">Add Equipment</a>
+            <a href="#" class="btn btn-secondary">View All Equipment</a>
+        </div>
+    </div>
+
+    <!-- System Configuration Card -->
+    <div class="dashboard-card">
+        <div class="card-header">
+            <div class="card-icon">🔧</div>
+            <h3 class="card-title">System Configuration</h3>
+        </div>
+        <div class="card-content">
+            <p>Configure system settings, procedures, and documentation templates.</p>
+            <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                <li>Update maintenance procedures</li>
+                <li>Configure notification settings</li>
+                <li>Manage document templates</li>
+                <li>System backup and restore</li>
+            </ul>
+        </div>
+        <div class="card-actions">
+            <a href="#" class="btn btn-primary">System Settings</a>
+            <a href="#" class="btn btn-secondary">Procedures</a>
+        </div>
+    </div>
+
+    <!-- Reports & Analytics Card -->
+    <div class="dashboard-card">
+        <div class="card-header">
+            <div class="card-icon">📊</div>
+            <h3 class="card-title">Reports & Analytics</h3>
+        </div>
+        <div class="card-content">
+            <p>Generate comprehensive reports and analyze system performance.</p>
+            <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                <li>System usage statistics</li>
+                <li>Compliance reports</li>
+                <li>User activity logs</li>
+                <li>Equipment performance metrics</li>
+            </ul>
+        </div>
+        <div class="card-actions">
+            <a href="#" class="btn btn-primary">Generate Reports</a>
+            <a href="#" class="btn btn-secondary">View Analytics</a>
+        </div>
+    </div>
+
+    <!-- Database Management Card -->
+    <div class="dashboard-card">
+        <div class="card-header">
+            <div class="card-icon">🗄️</div>
+            <h3 class="card-title">Database Management</h3>
+        </div>
+        <div class="card-content">
+            <p>Maintain databases, storage systems, and archived records.</p>
+            <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                <li>Database maintenance and cleanup</li>
+                <li>Archive completed records</li>
+                <li>Manage file storage systems</li>
+                <li>Data backup and recovery</li>
+            </ul>
+        </div>
+        <div class="card-actions">
+            <a href="#" class="btn btn-primary">Database Tools</a>
+            <a href="#" class="btn btn-secondary">Storage Manager</a>
+        </div>
+    </div>
+
+    <!-- Compliance & Audit Card -->
+    <div class="dashboard-card">
+        <div class="card-header">
+            <div class="card-icon">✅</div>
+            <h3 class="card-title">Compliance & Audit</h3>
+        </div>
+        <div class="card-content">
+            <p>Ensure system compliance with quality management standards.</p>
+            <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                <li>ISO13485 compliance monitoring</li>
+                <li>21CFR Part 820 requirements</li>
+                <li>EU MDR compliance tracking</li>
+                <li>Audit trail management</li>
+            </ul>
+        </div>
+        <div class="card-actions">
+            <a href="#" class="btn btn-primary">Compliance Check</a>
+            <a href="#" class="btn btn-secondary">Audit Reports</a>
+        </div>
+    </div>
+</div>
+
+<!-- System Status Overview -->
+<div class="quick-actions">
+    <h3>📈 System Status Overview</h3>
+    <div class="dashboard-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+        <div style="background: #e8f5e8; padding: 1.5rem; border-radius: 10px; text-align: center;">
+            <h4 style="color: #28a745; margin-bottom: 0.5rem;">Active Users</h4>
+            <p style="font-size: 2rem; font-weight: bold; color: #28a745;">{{ total_users|default:"12" }}</p>
+        </div>
+        <div style="background: #fff3cd; padding: 1.5rem; border-radius: 10px; text-align: center;">
+            <h4 style="color: #856404; margin-bottom: 0.5rem;">Equipment Items</h4>
+            <p style="font-size: 2rem; font-weight: bold; color: #856404;">{{ total_equipment|default:"45" }}</p>
+        </div>
+        <div style="background: #cce7ff; padding: 1.5rem; border-radius: 10px; text-align: center;">
+            <h4 style="color: #004085; margin-bottom: 0.5rem;">Pending Tasks</h4>
+            <p style="font-size: 2rem; font-weight: bold; color: #004085;">{{ pending_tasks|default:"8" }}</p>
+        </div>
+        <div style="background: #f8d7da; padding: 1.5rem; border-radius: 10px; text-align: center;">
+            <h4 style="color: #721c24; margin-bottom: 0.5rem;">Overdue Items</h4>
+            <p style="font-size: 2rem; font-weight: bold; color: #721c24;">{{ overdue_items|default:"2" }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
