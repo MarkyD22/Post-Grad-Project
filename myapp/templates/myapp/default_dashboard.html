@@ -1,0 +1,332 @@
+{% extends 'myapp/base_dashboard.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page_title }} - M&C Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #1e3a8a;
+            --secondary-blue: #3b82f6;
+            --light-blue: #dbeafe;
+            --primary-yellow: #fbbf24;
+            --secondary-yellow: #fcd34d;
+            --light-yellow: #fef3c7;
+            --white: #ffffff;
+            --gray-100: #f3f4f6;
+            --gray-800: #1f2937;
+            --green: #10b981;
+            --red: #ef4444;
+            --orange: #f97316;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, var(--light-blue) 0%, var(--light-yellow) 100%);
+            min-height: 100vh;
+            color: var(--gray-800);
+        }
+
+        .header {
+            background: linear-gradient(90deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            padding: 1rem 0;
+            color: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: var(--white);
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .role-badge {
+            background: var(--orange);
+            color: var(--white);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .main-content {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .welcome-card {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .welcome-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .welcome-card h1 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+
+        .welcome-message {
+            font-size: 1.2rem;
+            color: var(--gray-800);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .info-card {
+            background: var(--light-yellow);
+            border: 2px solid var(--primary-yellow);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .info-card h3 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+
+        .info-card p {
+            margin-bottom: 0.5rem;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: inline-block;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-blue);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary-blue);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--primary-yellow);
+            color: var(--primary-blue);
+        }
+
+        .btn-secondary:hover {
+            background: var(--secondary-yellow);
+            transform: translateY(-2px);
+        }
+
+        .btn-large {
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+        }
+
+        .email-btn {
+            background: var(--green);
+            color: var(--white);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .email-btn:hover {
+            background: #059669;
+        }
+
+        .email-icon {
+            font-size: 1.2rem;
+        }
+
+        .user-details {
+            background: var(--gray-100);
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+        }
+
+        .user-details h4 {
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .user-details p {
+            margin: 0.25rem 0;
+            font-size: 0.9rem;
+        }
+
+        .steps-list {
+            text-align: left;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .steps-list li {
+            margin: 0.5rem 0;
+            padding-left: 1rem;
+            position: relative;
+        }
+
+        .steps-list li::before {
+            content: '✓';
+            color: var(--green);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            .user-info {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .welcome-card {
+                padding: 2rem;
+            }
+            
+            .welcome-card h1 {
+                font-size: 1.5rem;
+            }
+            
+            .button-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="nav-container">
+            <a href="{% url 'myapp:home' %}" class="logo">🔧 M&C Tracker</a>
+            <div class="user-info">
+                <span>Hello, {{ user_display_name }}!</span>
+                <span class="role-badge">Role Not Assigned</span>
+                <a href="{% url 'logout' %}" style="color: var(--white); text-decoration: none;">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="welcome-card">
+            <div class="welcome-icon">👋</div>
+            <h1>Welcome {{ user_display_name }} to the Maintenance and Calibration System</h1>
+            <p class="welcome-message">
+                Your account has been successfully created! Please contact the administrator to assign your role so you can begin using the system's full features.
+            </p>
+
+            <div class="user-details">
+                <h4>Your Account Information:</h4>
+                <p><strong>Username:</strong> {{ user.username }}</p>
+                <p><strong>Email:</strong> {{ user.email|default:"Not provided" }}</p>
+                <p><strong>Registration Date:</strong> {{ user.date_joined|date:"F d, Y \a\t g:i A" }}</p>
+            </div>
+        </div>
+
+        <div class="info-card">
+            <h3>What happens next?</h3>
+            <ol class="steps-list">
+                <li>Click the "Contact Administrator" button below to send an email with your signup information</li>
+                <li>Wait for the administrator to assign you a role (Administrator, Maintenance User, or Quality Engineer)</li>
+                <li>Once your role is assigned, you'll have access to your personalized dashboard and system features</li>
+                <li>You'll receive confirmation once your role has been activated</li>
+            </ol>
+        </div>
+
+        <div class="button-container">
+            <a href="mailto:{{ admin_email }}?subject={{ email_subject|urlencode }}&body={{ email_body|urlencode }}" 
+               class="btn btn-large email-btn">
+                <span class="email-icon">✉️</span>
+                Contact Administrator
+            </a>
+            
+            <a href="{% url 'myapp:home' %}" class="btn btn-secondary btn-large">
+                Back to Home
+            </a>
+        </div>
+
+        <div class="info-card" style="margin-top: 2rem;">
+            <h3>Need Help?</h3>
+            <p>If you have any questions about the system or need immediate assistance, you can:</p>
+            <ul style="margin-top: 1rem; text-align: left;">
+                <li style="margin: 0.5rem 0;">Email the administrator directly at: <strong>{{ admin_email }}</strong></li>
+                <li style="margin: 0.5rem 0;">Reference your username: <strong>{{ user.username }}</strong> in all communications</li>
+                <li style="margin: 0.5rem 0;">Check back here later to see if your role has been assigned</li>
+            </ul>
+        </div>
+    </main>
+
+    <script>
+        // Optional: Add some interactivity
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user clicked the email button
+            const emailBtn = document.querySelector('.email-btn');
+            emailBtn.addEventListener('click', function() {
+                // Show a confirmation message
+                setTimeout(function() {
+                    alert('Email client opened! If your email client didn\'t open automatically, please copy the administrator email: {{ admin_email }}');
+                }, 100);
+            });
+        });
+    </script>
+</body>
+</html>

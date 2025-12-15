@@ -1,0 +1,21 @@
+﻿{% load static %}
+<img src="{% static 'LaserValidationLogo.jpeg' %}" alt="Logo">
+
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Logout</title>
+</head>
+<body>
+    <div class="logo">
+        <img src="{% static 'myapp/images/LaserValidationLogo.jpeg' %}" 
+            alt="Laser Validation Logo" 
+            onerror="this.style.display='none'; this.parentNode.innerHTML='M&C';">
+    </div>
+    
+    <h2>You have been logged out</h2>
+    <p><a href="{% url 'login' %}">Log in again</a></p>
+</body>
+</html>

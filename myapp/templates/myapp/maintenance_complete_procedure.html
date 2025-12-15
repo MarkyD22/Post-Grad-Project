@@ -1,0 +1,62 @@
+{% extends 'myapp/base_dashboard.html' %}
+
+{% block title %}Complete Procedure{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h4><i class="fas fa-check-circle"></i> Mark Procedure Complete</h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <strong>Equipment:</strong> {{ equipment.machine_name }} ({{ equipment.machine_id }})<br>
+                        <strong>Location:</strong> {{ equipment.machine_location }}
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="form-group mb-3">
+                            <label><strong>Procedure Type *</strong></label>
+                            {{ form.procedure_type }}
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="{{ form.completion_date.id_for_label }}">Completion Date *</label>
+                            {{ form.completion_date }}
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="{{ form.notes.id_for_label }}">Notes</label>
+                            {{ form.notes }}
+                            <small class="form-text text-muted">
+                                Optional: Add any notes about the procedure (repairs, parts replaced, etc.)
+                            </small>
+                        </div>
+
+                        <div class="alert alert-secondary">
+                            <strong>Current Status:</strong><br>
+                            Last Calibration: {{ equipment.last_calibration_date|default:"Not set" }}<br>
+                            Next Calibration Due: {{ equipment.next_calibration_date|date:"Y-m-d"|default:"Not calculated" }}<br>
+                            Last Maintenance: {{ equipment.last_maintenance_date|default:"Not set" }}<br>
+                            Next Maintenance Due: {{ equipment.next_maintenance_date|date:"Y-m-d"|default:"Not calculated" }}
+                        </div>
+
+                        <div class="form-group mt-4">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-check"></i> Mark as Complete
+                            </button>
+                            <a href="{% url 'maintenance_dashboard' %}" class="btn btn-secondary btn-lg">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

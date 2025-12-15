@@ -1,0 +1,87 @@
+sequenceDiagram
+    participant MU as Maintenance User
+    participant WEB as Web Interface
+    participant AUTH as Authentication System
+    participant APP as Django Application
+    participant DB as PostgreSQL Database
+    participant FS as File Storage
+    
+    Note over MU, FS: Maintenance User Login and Task Completion Flow
+    
+    %% Login Process
+    MU->>WEB: Navigate to login page
+    WEB->>MU: Display login form
+    MU->>WEB: Enter credentials (username/password)
+    WEB->>AUTH: Validate credentials
+    AUTH->>DB: Check user credentials
+    DB->>AUTH: Return user data & role
+    AUTH->>WEB: Authentication successful
+    WEB->>MU: Redirect to dashboard
+    
+    %% Dashboard Loading
+    MU->>WEB: Request dashboard
+    WEB->>APP: Get user dashboard data
+    APP->>DB: Query equipment due in 2 weeks
+    DB->>APP: Return due equipment list
+    APP->>DB: Query user's assigned equipment
+    DB->>APP: Return assigned equipment
+    APP->>WEB: Compile dashboard data
+    WEB->>MU: Display dashboard with due items
+    
+    %% Equipment Selection
+    MU->>WEB: Select equipment for maintenance
+    WEB->>APP: Request equipment details
+    APP->>DB: Query equipment information
+    DB->>APP: Return equipment details
+    APP->>DB: Query maintenance procedure
+    DB->>APP: Return procedure details
+    APP->>WEB: Send equipment & procedure data
+    WEB->>MU: Display equipment details & procedure
+    
+    %% Print Procedure
+    MU->>WEB: Request to print procedure
+    WEB->>APP: Generate printable procedure
+    APP->>DB: Get latest procedure version
+    DB->>APP: Return procedure document
+    APP->>WEB: Format for printing
+    WEB->>MU: Display printable procedure
+    
+    %% Complete Maintenance Task
+    Note over MU, FS: User performs physical maintenance (offline)
+    
+    MU->>WEB: Access task completion form
+    WEB->>MU: Display maintenance completion form
+    MU->>WEB: Fill maintenance details (date, notes, scheduled/unscheduled)
+    MU->>WEB: Upload completed checklist/photos
+    WEB->>FS: Store uploaded files
+    FS->>WEB: Return file storage path
+    WEB->>APP: Submit maintenance completion data
+    
+    %% Update Database
+    APP->>DB: Update last_maintenance_date
+    DB->>APP: Confirm date updated
+    APP->>DB: Calculate next maintenance due date
+    DB->>APP: Return calculated due date
+    APP->>DB: Insert maintenance record
+    DB->>APP: Confirm record inserted
+    APP->>DB: Link uploaded documents
+    DB->>APP: Confirm document links saved
+    
+    %% System Notifications
+    APP->>APP: Check if maintenance overdue
+    alt Maintenance was overdue
+        APP->>APP: Generate alert for Quality Engineer
+        APP->>DB: Log compliance event
+    else Maintenance on time
+        APP->>DB: Log successful completion
+    end
+    
+    %% Completion Response
+    APP->>WEB: Maintenance completion confirmed
+    WEB->>MU: Display success message
+    WEB->>MU: Updated dashboard (remove completed item)
+    
+    %% Quality Engineer Notification
+    Note over APP, DB: System automatically notifies Quality Engineer
+    APP->>DB: Update equipment compliance status
+    DB->>APP: Confirm status updated

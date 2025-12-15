@@ -1,0 +1,42 @@
+{% extends 'myapp/base_dashboard.html' %}
+
+{% block title %}Confirm Delete{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h4><i class="fas fa-exclamation-triangle"></i> Confirm Deletion</h4>
+                </div>
+                <div class="card-body">
+                    <p class="lead">Are you sure you want to remove this equipment?</p>
+                    
+                    <div class="alert alert-warning">
+                        <strong>Equipment Details:</strong><br>
+                        <strong>ID:</strong> {{ equipment.machine_id }}<br>
+                        <strong>Name:</strong> {{ equipment.machine_name }}<br>
+                        <strong>Type:</strong> {{ equipment.get_machine_type_display }}<br>
+                        <strong>Location:</strong> {{ equipment.machine_location }}
+                    </div>
+
+                    <p class="text-danger">
+                        <strong>Warning:</strong> This action cannot be undone. All associated records will be permanently removed.
+                    </p>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-lg">
+                            <i class="fas fa-trash"></i> Yes, Delete Equipment
+                        </button>
+                        <a href="{% url 'maintenance_dashboard' %}" class="btn btn-secondary btn-lg">
+                            <i class="fas fa-times"></i> Cancel
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

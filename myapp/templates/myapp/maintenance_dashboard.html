@@ -1,0 +1,292 @@
+{% extends 'myapp/base_dashboard.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Maintenance Dashboard</h2>
+    <p class="text-muted">Welcome, {{ request.user.username }}!</p>
+    
+    <!-- Action Buttons -->
+    <div class="mb-4">
+        <a href="{% url 'maintenance_add_equipment' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add New Equipment
+        </a>
+        <a href="{% url 'equipment_list' %}" class="btn btn-info">
+            <i class="fas fa-list"></i> View All Equipment
+        </a>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Total Equipment</h5>
+                    <h2>{{ total_equipment }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-danger text-white">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Overdue Calibrations</h5>
+                    <h2>{{ overdue_calibration_count }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Overdue Maintenance</h5>
+                    <h2>{{ overdue_maintenance_count }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Due Soon</h5>
+                    <h2>{{ due_soon_calibration_count|add:due_soon_maintenance_count }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Equipment Search Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-primary">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-search"></i> Equipment Search & Filter
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="GET" class="row g-3">
+                        <div class="col-md-6">
+                            <label for="search" class="form-label">Search Equipment</label>
+                            <input type="text" 
+                                   id="search"
+                                   name="search" 
+                                   value="{{ search }}" 
+                                   placeholder="Search by ID, name, or location..." 
+                                   class="form-control">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="machine_type" class="form-label">Machine Type</label>
+                            {% if filter_form.machine_type %}
+                                {{ filter_form.machine_type }}
+                            {% else %}
+                                <select name="machine_type" class="form-control">
+                                    <option value="">All Types</option>
+                                </select>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">&nbsp;</label>
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-primary">
+                                    Search
+                                </button>
+                                <a href="?" class="btn btn-secondary">
+                                    Clear
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                    
+                    {% if has_filters %}
+                    <div class="mt-3 pt-3 border-top">
+                        <small class="text-muted">
+                            {% if search %}
+                                Search results for "<strong>{{ search }}</strong>": 
+                            {% endif %}
+                            <strong>{{ filtered_equipment_count }}</strong> equipment found
+                        </small>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Results Display -->
+    {% if has_filters %}
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        Search Results 
+                        <span class="badge bg-primary ms-2">{{ filtered_equipment_count }}</span>
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if filtered_equipment %}
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Machine ID</th>
+                                        <th>Machine Name</th>
+                                        <th>Type</th>
+                                        <th>Location</th>
+                                        <th>Last Maintenance</th>
+                                        <th>Last Calibration</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for equipment in filtered_equipment %}
+                                    <tr>
+                                        <td><strong>{{ equipment.machine_id }}</strong></td>
+                                        <td>{{ equipment.machine_name }}</td>
+                                        <td>
+                                            <span class="badge bg-info">{{ equipment.get_machine_type_display }}</span>
+                                        </td>
+                                        <td>{{ equipment.machine_location }}</td>
+                                        <td>
+                                            {% if equipment.last_maintenance_date %}
+                                                {{ equipment.last_maintenance_date }}
+                                            {% else %}
+                                                <span class="text-muted">Never</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if equipment.last_calibration_date %}
+                                                {{ equipment.last_calibration_date }}
+                                            {% else %}
+                                                <span class="text-muted">Never</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <a href="{% url 'equipment_detail' equipment.machine_id %}" 
+                                               class="btn btn-sm btn-info">
+                                                View
+                                            </a>
+                                            <a href="{% url 'maintenance_complete_procedure' equipment.machine_id %}" 
+                                               class="btn btn-sm btn-success">
+                                                <i class="fas fa-check"></i> Complete
+                                            </a>
+                                            <a href="{% url 'maintenance_delete_equipment' equipment.machine_id %}" 
+                                               class="btn btn-sm btn-danger">
+                                                <i class="fas fa-trash"></i> Remove
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-warning">
+                            No equipment found matching your search criteria.
+                            <a href="?" class="alert-link">Clear search</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Due Calibrations -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h4>Equipment Due for Calibration (Next 14 Days)</h4>
+        </div>
+        <div class="card-body">
+            {% if due_calibration %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Machine ID</th>
+                                <th>Machine Name</th>
+                                <th>Location</th>
+                                <th>Last Calibration</th>
+                                <th>Next Due</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for equipment in due_calibration %}
+                            <tr>
+                                <td>{{ equipment.machine_id }}</td>
+                                <td>{{ equipment.machine_name }}</td>
+                                <td>{{ equipment.machine_location }}</td>
+                                <td>{{ equipment.last_calibration_date|default:"Not set" }}</td>
+                                <td>
+                                    <strong>{{ equipment.next_calibration_date|date:"Y-m-d" }}</strong>
+                                </td>
+                                <td>
+                                    <a href="{% url 'maintenance_complete_procedure' equipment.machine_id %}" 
+                                       class="btn btn-success btn-sm">
+                                        <i class="fas fa-check"></i> Mark Complete
+                                    </a>
+                                    <a href="{% url 'maintenance_delete_equipment' equipment.machine_id %}" 
+                                       class="btn btn-danger btn-sm">
+                                        <i class="fas fa-trash"></i> Remove
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted">No calibrations due in the next 14 days.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Due Maintenance -->
+    <div class="card mb-4">
+        <div class="card-header" style="background-color: #FFC107;">
+            <h4>Equipment Due for Maintenance (Next 14 Days)</h4>
+        </div>
+        <div class="card-body">
+            {% if due_maintenance %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Machine ID</th>
+                                <th>Machine Name</th>
+                                <th>Location</th>
+                                <th>Last Maintenance</th>
+                                <th>Next Due</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for equipment in due_maintenance %}
+                            <tr>
+                                <td>{{ equipment.machine_id }}</td>
+                                <td>{{ equipment.machine_name }}</td>
+                                <td>{{ equipment.machine_location }}</td>
+                                <td>{{ equipment.last_maintenance_date|default:"Not set" }}</td>
+                                <td>
+                                    <strong>{{ equipment.next_maintenance_date|date:"Y-m-d" }}</strong>
+                                </td>
+                                <td>
+                                    <a href="{% url 'maintenance_complete_procedure' equipment.machine_id %}" 
+                                       class="btn btn-success btn-sm">
+                                        <i class="fas fa-check"></i> Mark Complete
+                                    </a>
+                                    <a href="{% url 'maintenance_delete_equipment' equipment.machine_id %}" 
+                                       class="btn btn-danger btn-sm">
+                                        <i class="fas fa-trash"></i> Remove
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted">No maintenance due in the next 14 days.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

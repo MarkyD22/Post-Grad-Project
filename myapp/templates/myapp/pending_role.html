@@ -1,0 +1,253 @@
+{% extends 'myapp/base_dashboard.html' %}
+
+{% load static %}
+<img src="{% static 'myapp/images/LaserValidationLogo.jpeg' %}" alt="Logo">
+
+{% block content %}
+<!-- Quality Quick Actions -->
+<div class="quick-actions">
+    <h3>🎯 Quality Control Tools</h3>
+    <div class="actions-grid">
+        <a href="#" class="btn btn-primary">Generate Reports</a>
+        <a href="#" class="btn btn-secondary">Compliance Check</a>
+        <a href="#" class="btn btn-outline">Equipment Search</a>
+        <a href="#" class="btn btn-outline">Performance Metrics</a>
+    </div>
+</div>
+
+<!-- Compliance Status -->
+<div class="dashboard-card" style="border-left: 5px solid #28a745; margin-bottom: 2rem;">
+    <div class="card-header">
+        <div class="card-icon" style="background: #28a745;">✅</div>
+        <h3 class="card-title" style="color: #28a745;">Compliance Status</h3>
+    </div>
+    <div class="card-content">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+            <div style="background: #d4edda; padding: 1rem; border-radius: 8px; text-align: center;">
+                <h4 style="color: #155724;">ISO 13485</h4>
+                <p style="font-size: 1.5rem; font-weight: bold; color: #155724; margin: 0.5rem 0;">98.5%</p>
+                <small style="color: #155724;">Compliance Rate</small>
+            </div>
+            <div style="background: #d4edda; padding: 1rem; border-radius: 8px; text-align: center;">
+                <h4 style="color: #155724;">21CFR Part 820</h4>
+                <p style="font-size: 1.5rem; font-weight: bold; color: #155724; margin: 0.5rem 0;">97.2%</p>
+                <small style="color: #155724;">Compliance Rate</small>
+            </div>
+            <div style="background: #fff3cd; padding: 1rem; border-radius: 8px; text-align: center;">
+                <h4 style="color: #856404;">EU MDR</h4>
+                <p style="font-size: 1.5rem; font-weight: bold; color: #856404; margin: 0.5rem 0;">95.8%</p>
+                <small style="color: #856404;">Needs Attention</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Dashboard Grid -->
+<div class="dashboard-grid">
+    <!-- Equipment Compliance Card -->
+    <div class="dashboard-card">
+        <div class="card-header">
+            <div class="card-icon">🏭</div>
+            <h3 class="card-title">Equipment Compliance</h3>
+        </div>
+        <div class="card-content">
+            <p>Monitor equipment compliance status and ensure all production equipment is up to date.</p>
+            
+            <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                <h4 style="color: #28a745; margin-bottom: 0.5rem;">✅ Compliant Equipment</h4>
+                <p style="font-size: 1.8rem; font-weight: bold; color: #28a745; margin: 0;">42 of 45</p>
+                <small style="color: #666;">93.3% compliance rate</small>
+            </div>
+
+            <div style="background: #fff3cd; padding: 1rem; border-radius: 8px;">
+                <h4 style="color: #856404; margin-bottom: 0.5rem;">⚠️ Attention Required</h4>
+                <ul style="list-style: none; padding: 0; margin: 0.5rem 0;">
+                    <li style="padding: 0.2rem 0;">• CNC Machine #003 - Overdue calibration</li>
+                    <li style="padding: 0.2rem 0;">• Press #007 - Maintenance due today</li>
+                    <li style="padding: 0.2rem 0;">• Scale #009 - Certificate expired</li>
+                </ul>
+            </div>
+        </div>
+        <div class="card-actions">
+            <a href="#" class="btn btn-primary">View Details</a>
+            <a href="#" class="btn btn-secondary">Generate Report</a>
+        </div>
+    </div>
+
+    <!-- Reports Generation Card -->
+    <div class="dashboard-card">
+        <div class="card-header">
+            <div class="card-icon">📊</div>
+            <h3 class="card-title">Reports & Analytics</h3>
+        </div>
+        <div class="card-content">
+            <p>Generate comprehensive reports on maintenance and calibration activities.</p>
+            <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                <li>Monthly maintenance reports</li>
+                <li>Annual calibration summaries</li>
+                <li>Compliance status reports</li>
+                <li>Equipment performance metrics</li>
+            </ul>
+            
+            <div style="background: #e8f4fd; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                <strong>Quick Report Options:</strong>
+                <div style="margin-top: 0.5rem;">
+                    <a href="#" style="color: #007bff; text-decoration: none; margin-right: 1rem;">• This Month</a>
+                    <a href="#" style="color: #007bff; text-decoration: none; margin-right: 1rem;">• Last Quarter</a>
+                    <a href="#" style="color: #007bff; text-decoration: none;">• Year to Date</a>
+                </div>
+            </div>
+        </div>
+        <div class="card-actions">
+            <a href="#" class="btn btn-primary">Custom Report</a>
+            <a href="#" class="btn btn-secondary">Scheduled Reports</a>
+        </div>
+    </div>
+
+    <!-- Equipment Search Card -->
+    <div class="dashboard-card">
+        <div class="card-header">
+            <div class="card-icon">🔍</div>
+            <h3 class="card-title">Equipment Search & History</h3>
+        </div>
+        <div class="card-content">
+            <p>Search for specific equipment and view detailed maintenance and calibration history.</p>
+            
+            <div style="margin: 1rem 0;">
+                <input type="text" placeholder="Search by machine ID, name, or location..." 
+                       style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 0.5rem;">
+                <select style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 5px;">
+                    <option>All Time Periods</option>
+                    <option>Last 30 days</option>
+                    <option>Last 6 months</option>
+                    <option>Last year</option>
+                </select>
+            </div>
+        </div>
+        <div class="card-actions">
+            <a href="#" class="btn btn-primary">Advanced Search</a>
+            <a href="#" class="btn btn-secondary">Export Results</a>
+        </div>
+    </div>
+
+    <!-- Performance Metrics Card -->
+    <div class="dashboard-card">
+        <div class="card-header">
+            <div class="card-icon">📈</div>
+            <h3 class="card-title">Performance Metrics</h3>
+        </div>
+        <div class="card-content">
+            <p>Track key performance indicators and system effectiveness.</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0;">
+                <div style="text-align: center; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                    <h4 style="color: #1e3c72; margin-bottom: 0.5rem;">On-Time Rate</h4>
+                    <p style="font-size: 1.5rem; font-weight: bold; color: #28a745;">94.2%</p>
+                </div>
+                <div style="text-align: center; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                    <h4 style="color: #1e3c72; margin-bottom: 0.5rem;">MTBF</h4>
+                    <p style="font-size: 1.5rem; font-weight: bold; color: #007bff;">186 days</p>
+                </div>
+            </div>
+            
+            <ul style="margin: 1rem 0; padding-left: 1.5rem; font-size: 0.9rem;">
+                <li>Mean Time Between Failures (MTBF)</li>
+                <li>Overall Equipment Effectiveness (OEE)</li>
+                <li>Maintenance cost per unit</li>
+                <li>Compliance trending</li>
+            </ul>
+        </div>
+        <div class="card-actions">
+            <a href="#" class="btn btn-primary">Detailed Metrics</a>
+            <a href="#" class="btn btn-secondary">Trend Analysis</a>
+        </div>
+    </div>
+
+    <!-- Audit Trail Card -->
+    <div class="dashboard-card">
+        <div class="card-header">
+            <div class="card-icon">📋</div>
+            <h3 class="card-title">Audit Trail</h3>
+        </div>
+        <div class="card-content">
+            <p>Monitor system changes and maintain complete audit documentation.</p>
+            <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                <li>User activity logs</li>
+                <li>Equipment status changes</li>
+                <li>Procedure modifications</li>
+                <li>Document revisions</li>
+            </ul>
+            
+            <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                <strong>Recent Activity:</strong>
+                <div style="margin-top: 0.5rem; font-size: 0.9rem;">
+                    <p style="margin: 0.2rem 0;">• Equipment #003 calibration completed by J.Smith</p>
+                    <p style="margin: 0.2rem 0;">• Maintenance procedure updated for Press #004</p>
+                    <p style="margin: 0.2rem 0;">• New user role assigned: M.Johnson (Quality)</p>
+                </div>
+            </div>
+        </div>
+        <div class="card-actions">
+            <a href="#" class="btn btn-primary">View Audit Log</a>
+            <a href="#" class="btn btn-secondary">Export Log</a>
+        </div>
+    </div>
+
+    <!-- Document Control Card -->
+    <div class="dashboard-card">
+        <div class="card-header">
+            <div class="card-icon">📄</div>
+            <h3 class="card-title">Document Control</h3>
+        </div>
+        <div class="card-content">
+            <p>Manage controlled documents, procedures, and quality records.</p>
+            <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                <li>Controlled document library</li>
+                <li>Procedure version control</li>
+                <li>Quality record archival</li>
+                <li>Document approval workflow</li>
+            </ul>
+            
+            <div style="background: #e8f5e8; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                <strong>Document Status:</strong>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;">
+                    ✅ 156 current documents<br>
+                    📝 3 pending approval<br>
+                    📋 8 scheduled for review
+                </p>
+            </div>
+        </div>
+        <div class="card-actions">
+            <a href="#" class="btn btn-primary">Document Library</a>
+            <a href="#" class="btn btn-secondary">Approval Queue</a>
+        </div>
+    </div>
+</div>
+
+<!-- Summary Statistics -->
+<div class="quick-actions">
+    <h3>📊 Quality Metrics Summary</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+        <div style="background: linear-gradient(135deg, #28a745, #20c997); color: white; padding: 1.5rem; border-radius: 10px; text-align: center;">
+            <h4 style="margin-bottom: 0.5rem;">Equipment Uptime</h4>
+            <p style="font-size: 2rem; font-weight: bold; margin: 0.5rem 0;">{{ equipment_uptime|default:"96.8" }}%</p>
+            <small>Last 30 days</small>
+        </div>
+        <div style="background: linear-gradient(135deg, #007bff, #0056b3); color: white; padding: 1.5rem; border-radius: 10px; text-align: center;">
+            <h4 style="margin-bottom: 0.5rem;">Scheduled Tasks</h4>
+            <p style="font-size: 2rem; font-weight: bold; margin: 0.5rem 0;">{{ scheduled_completion|default:"94.2" }}%</p>
+            <small>Completion rate</small>
+        </div>
+        <div style="background: linear-gradient(135deg, #ffd700, #ffed4e); color: #1e3c72; padding: 1.5rem; border-radius: 10px; text-align: center;">
+            <h4 style="margin-bottom: 0.5rem;">Quality Score</h4>
+            <p style="font-size: 2rem; font-weight: bold; margin: 0.5rem 0;">{{ quality_score|default:"97.1" }}%</p>
+            <small>Overall system health</small>
+        </div>
+        <div style="background: linear-gradient(135deg, #6f42c1, #5a2d91); color: white; padding: 1.5rem; border-radius: 10px; text-align: center;">
+            <h4 style="margin-bottom: 0.5rem;">Cost Savings</h4>
+            <p style="font-size: 2rem; font-weight: bold; margin: 0.5rem 0;">${{ cost_savings|default:"15.2" }}K</p>
+            <small>This quarter</small>
+        </div>
+    </div>
+</div>
+{% endblock %}

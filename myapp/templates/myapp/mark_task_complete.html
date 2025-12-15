@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Task - {{ equipment.machine_name }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+        
+        .form-container {
+            background-color: white;
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+        }
+        
+        .form-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 3px solid #ffd700;
+        }
+        
+        .form-header h1 {
+            color: #1a2b4d;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+        
+        .equipment-info {
+            background-color: #f5f5f5;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border-left: 4px solid #1e3c72;
+        }
+        
+        .equipment-info h3 {
+            color: #1a2b4d;
+            margin-bottom: 1rem;
+        }
+        
+        .equipment-info p {
+            color: #555;
+            margin: 0.5rem 0;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            color: #1a2b4d;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-group input[type="date"],
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #ffd700;
+        }
+        
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        
+        .checkbox-group label {
+            margin: 0;
+            cursor: pointer;
+        }
+        
+        .task-type-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .task-option {
+            position: relative;
+        }
+        
+        .task-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+        
+        .task-option label {
+            display: block;
+            padding: 1.5rem;
+            background-color: #f5f5f5;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .task-option input[type="radio"]:checked + label {
+            background-color: #ffd700;
+            border-color: #ffd700;
+            color: #1a2b4d;
+        }
+        
+        .task-option label:hover {
+            border-color: #ffd700;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: #ffd700;
+            color: #1a2b4d;
+        }
+        
+        .btn-primary:hover {
+            background-color: #ffed4e;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255,215,0,0.4);
+        }
+        
+        .btn-secondary {
+            background-color: #e0e0e0;
+            color: #555;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #d0d0d0;
+        }
+        
+        .success-message {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #2e7d32;
+        }
+        
+        .error-message {
+            background-color: #ffebee;
+            color: #c62828;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #c62828;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="form-header">
+            <h1>Complete Task</h1>
+            <p>Update maintenance or calibration completion</p>
+        </div>
+        
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'error' %}
+                    <div class="error-message">{{ message }}</div>
+                {% else %}
+                    <div class="success-message">{{ message }}</div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        
+        <div class="equipment-info">
+            <h3>{{ equipment.machine_name }}</h3>
+            <p><strong>Machine ID:</strong> {{ equipment.machine_id }}</p>
+            <p><strong>Type:</strong> {{ equipment.get_machine_type_display }}</p>
+            <p><strong>Location:</strong> {{ equipment.machine_location }}</p>
+        </div>
+        
+        <form method="POST">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label>Select Task Type</label>
+                <div class="task-type-selector">
+                    <div class="task-option">
+                        <input type="radio" id="maintenance" name="task_type" value="maintenance" checked>
+                        <label for="maintenance">
+                            🔧 Maintenance<br>
+                            <small style="font-weight: normal; font-size: 0.85rem;">
+                                Last: {{ equipment.last_maintenance_date|date:"d M Y"|default:"Never" }}
+                            </small>
+                        </label>
+                    </div>
+                    <div class="task-option">
+                        <input type="radio" id="calibration" name="task_type" value="calibration">
+                        <label for="calibration">
+                            ⚙️ Calibration<br>
+                            <small style="font-weight: normal; font-size: 0.85rem;">
+                                Last: {{ equipment.last_calibration_date|date:"d M Y"|default:"Never" }}
+                            </small>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="completion_date">Completion Date</label>
+                <input type="date" id="completion_date" name="completion_date" value="{{ today|date:'Y-m-d' }}" required max="{{ today|date:'Y-m-d' }}">
+            </div>
+            
+            <div class="form-group">
+                <div class="checkbox-group">
+                    <input type="checkbox" id="is_scheduled" name="is_scheduled" checked>
+                    <label for="is_scheduled">This was a scheduled task</label>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="notes">Notes (Optional)</label>
+                <textarea id="notes" name="notes" placeholder="Add any additional notes or comments about this task..."></textarea>
+            </div>
+            
+            <div class="button-group">
+                <button type="submit" class="btn btn-primary">✓ Complete Task</button>
+                <a href="{% url 'equipment_detail' equipment.pk %}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

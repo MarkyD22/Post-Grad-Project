@@ -1,0 +1,88 @@
+%%{init: {
+  'theme': 'base',
+  'themeVariables': {
+    'fontSize': '16px',
+    'fontFamily': 'Arial'
+  },
+  'flowchart': {
+    'htmlLabels': true
+  }
+}}%%
+flowchart TD
+    %% Actors positioned at top
+    Admin([Administrator])
+    MaintUser([Maintenance User])
+    QualityEng([Quality Engineer])
+    
+    %% Core System Functions
+    subgraph Auth ["Authentication"]
+        UC1[Login]
+        UC2[Logout] 
+        UC3[Signup]
+    end
+    
+    subgraph Equipment ["Equipment Management"]
+        UC4[Add Equipment]
+        UC5[Update Equipment]
+        UC6[Remove Equipment]
+        UC7[Search Equipment]
+        UC8[View Equipment Details]
+    end
+    
+    subgraph Operations ["Maintenance & Calibration"]
+        UC12[View Dashboard]
+        UC13[Print Maintenance Procedure]
+        UC14[Complete Maintenance Task]
+        UC15[Record Maintenance Details]
+        UC17[Print Calibration Procedure]
+        UC18[Complete Calibration Task]
+        UC19[Record Calibration Details]
+        UC21[Upload Completed Forms]
+    end
+    
+    subgraph Management ["User & Document Management"]
+        UC9[Manage User Accounts]
+        UC10[Assign User Roles]
+        UC11[Update User Permissions]
+        UC22[Store Documents]
+        UC23[Retrieve Historical Records]
+    end
+    
+    subgraph Reports ["Reporting & Compliance"]
+        UC24[Generate Monthly Reports]
+        UC25[Generate Yearly Reports]
+        UC26[Search Equipment History]
+        UC27[Monitor Compliance Status]
+        UC28[View Upcoming Due Items]
+    end
+    
+    subgraph System ["System Operations"]
+        UC29[Calculate Due Dates]
+        UC30[Send Notifications]
+        UC31[Backup Data]
+    end
+    
+    %% Administrator connections
+    Admin --> Auth
+    Admin --> Equipment
+    Admin --> Management
+    Admin --> System
+    
+    %% Maintenance User connections  
+    MaintUser --> Auth
+    MaintUser --> Operations
+    MaintUser --> UC7
+    MaintUser --> UC8
+    
+    %% Quality Engineer connections
+    QualityEng --> Auth
+    QualityEng --> Reports
+    QualityEng --> UC7
+    QualityEng --> UC8
+    QualityEng --> UC23
+    
+    %% System automatic processes
+    UC29 -.-> UC30
+    UC14 -.-> UC15
+    UC18 -.-> UC19
+    UC12 -.-> UC28
