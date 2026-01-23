@@ -12,6 +12,8 @@ from django.core.paginator import Paginator
 from .models import UserProfile, Equipment, MACHINE_TYPE_CHOICES  
 from .forms import CustomUserCreationForm, EquipmentForm, EquipmentFilterForm, QuickUpdateForm, ProcedureCompleteForm
 from datetime import datetime, timedelta
+from .utils.charts import create_upcoming_tasks_chart
+from .models import Equipment
 import logging
 import json
 
@@ -395,7 +397,7 @@ def maintenance_dashboard(request):
 @login_required
 @role_required(['quality'])
 def quality_dashboard(request):
-    """Quality Engineer Dashboard - Monitor compliance and generate reports"""
+    """Quality Engineer Dashboard - With Visualizations, Monitor compliance and generate reports"""
     
     # Handle search functionality  
     search = request.GET.get('search', '').strip()
@@ -482,7 +484,13 @@ def quality_dashboard(request):
         'machine_type': machine_type,
         'status': status
     })
+
+   # Get all equipment
+    equipment_list = Equipment.objects.all()
     
+    # Generate chart
+    chart = create_upcoming_tasks_chart(equipment_list)
+
     context = {
         'user_role': 'Quality Engineer',
         'page_title': 'Quality Dashboard',
@@ -503,6 +511,9 @@ def quality_dashboard(request):
         'filter_form': filter_form,
         'filtered_equipment': filtered_equipment,
         'has_filters': bool(search or machine_type or status != 'all'),
+        #Context for charts
+        'chart': chart,
+        'equipment_list': equipment_list,
     }
     return render(request, 'myapp/quality_dashboard.html', context)
 
@@ -629,7 +640,7 @@ def equipment_detail(request, machine_id):
         'status_info': status_info,
     }
     
-    return render(request, 'myapp/equipment_detail.html', context)
+    return render(request, 'myapp/equipment/equipment_detail.html', context)
 
 @login_required
 @role_required(['administrator', 'maintenance'])

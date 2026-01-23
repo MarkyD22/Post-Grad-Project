@@ -1,0 +1,85 @@
+{% extends 'myapp/base_dashboard.html' %}
+
+{% block title %}Equipment Detail - {{ equipment.machine_name }}{% endblock %}
+
+{% block content %}
+<div style="max-width: 1200px; margin: 0 auto; padding: 2rem;">
+    <!-- Header -->
+    <div style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); 
+                color: white; padding: 2rem; border-radius: 10px; margin-bottom: 2rem;">
+        <h1 style="margin: 0; font-size: 2rem;">{{ equipment.machine_name }}</h1>
+        <p style="margin: 0.5rem 0 0 0; opacity: 0.9;">Machine ID: {{ equipment.machine_id }}</p>
+    </div>
+
+    <!-- Equipment Details Card -->
+    <div style="background: white; border-radius: 10px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 2rem;">
+        <h2 style="color: #1e3c72; border-bottom: 3px solid #f4c430; padding-bottom: 0.5rem; margin-bottom: 1.5rem;">
+            Equipment Information
+        </h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;">
+            <div>
+                <p style="color: #666; margin-bottom: 0.5rem; font-weight: 600;">Machine ID</p>
+                <p style="font-size: 1.1rem; margin: 0;">{{ equipment.machine_id }}</p>
+            </div>
+            
+            <div>
+                <p style="color: #666; margin-bottom: 0.5rem; font-weight: 600;">Machine Name</p>
+                <p style="font-size: 1.1rem; margin: 0;">{{ equipment.machine_name }}</p>
+            </div>
+            
+            <div>
+                <p style="color: #666; margin-bottom: 0.5rem; font-weight: 600;">Machine Type</p>
+                <p style="font-size: 1.1rem; margin: 0;">{{ equipment.machine_type }}</p>
+            </div>
+            
+            <div>
+                <p style="color: #666; margin-bottom: 0.5rem; font-weight: 600;">Location</p>
+                <p style="font-size: 1.1rem; margin: 0;">{{ equipment.machine_location }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Maintenance & Calibration Status -->
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-bottom: 2rem;">
+        <!-- Maintenance Card -->
+        <div style="background: white; border-radius: 10px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <h3 style="color: #1e3c72; margin-top: 0;">Maintenance Status</h3>
+            <div style="margin-top: 1rem;">
+                <p style="color: #666; margin-bottom: 0.5rem;">Last Maintenance Date</p>
+                <p style="font-size: 1.1rem; font-weight: 600; margin: 0;">
+                    {{ equipment.last_maintenance_date|date:"d M Y"|default:"Not recorded" }}
+                </p>
+            </div>
+        </div>
+
+        <!-- Calibration Card -->
+        <div style="background: white; border-radius: 10px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <h3 style="color: #1e3c72; margin-top: 0;">Calibration Status</h3>
+            <div style="margin-top: 1rem;">
+                <p style="color: #666; margin-bottom: 0.5rem;">Last Calibration Date</p>
+                <p style="font-size: 1.1rem; font-weight: 600; margin: 0;">
+                    {{ equipment.last_calibration_date|date:"d M Y"|default:"Not recorded" }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+        {% if user.user_profile.role == 'administrator' %}
+        <a href="{% url 'admin_edit_equipment' equipment.machine_id %}" 
+           style="background: #f4c430; color: #1e3c72; padding: 0.75rem 2rem; border-radius: 5px; 
+                  text-decoration: none; font-weight: 600; display: inline-block;">
+            Edit Equipment
+        </a>
+        {% endif %}
+        
+        <a href="{% url 'equipment_list' %}" 
+           style="background: #1e3c72; color: white; padding: 0.75rem 2rem; border-radius: 5px; 
+                  text-decoration: none; font-weight: 600; display: inline-block;">
+            Back to Equipment List
+        </a>
+    </div>
+</div>
+{% endblock %}

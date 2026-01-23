@@ -4,6 +4,20 @@
 <img src="{% static 'myapp/images/LaserValidationLogo.jpeg' %}" alt="Logo">
 
 {% block content %}
+
+<div class="dashboard-container">
+    <h1>Quality Engineer Dashboard</h1>
+    
+    <!-- Chart Section -->
+    <div class="chart-section">
+        <h2>Upcoming Tasks Overview</h2>
+        {% if chart %}
+            <img src="data:image/png;base64,{{ chart }}" alt="Tasks Chart">
+        {% else %}
+            <p>No data available for visualization.</p>
+        {% endif %}
+    </div>
+    
 <!-- Quality Quick Actions -->
 <div class="quick-actions">
     <h3>🎯 Quality Control Tools</h3>
@@ -265,6 +279,8 @@
         </div>
     </div>
 </div>
+
+
 
 <!-- Summary Statistics -->
 <div class="quick-actions">
