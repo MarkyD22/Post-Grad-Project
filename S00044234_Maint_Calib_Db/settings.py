@@ -27,9 +27,9 @@ SECRET_KEY = 'django-insecure-_ya&$bezjt8tj+!_22*h=^72y^ri4j=5^@&=-th2^+*w(20r60
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    'post-grad-project.onrender.com'
-    'localhost'
-    '127.0.0.1'
+    'post-grad-project.onrender.com',
+    'localhost',
+    '127.0.0.1',
     ]
 
 
